@@ -19,8 +19,8 @@ public class MainHttpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        PrintWriter writer = resp.getWriter();
-        writer.println("<h1 align=\"center\">Main</h1>");
+        req.getRequestDispatcher("/WEB-INF/menu.html").forward(req, resp);
+
     }
 
     @Override
