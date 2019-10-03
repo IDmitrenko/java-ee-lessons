@@ -13,12 +13,22 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>ErrorHTTPServlet</servlet-name>
+        <servlet-class>ru.geekbrains.servlet.ErrorHttpServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>FirstServlet</servlet-name>
         <!-- шаблон маппинга (широкий) -->
         <url-pattern>/firstservlet/*</url-pattern>
     </servlet-mapping>
-    
+
+    <servlet-mapping>
+        <servlet-name>ErrorHTTPServlet</servlet-name>
+        <url-pattern>/errorHTTPServlet</url-pattern>
+    </servlet-mapping>
+
     <context-param>
         <param-name>jdbcConnectionString</param-name>
         <param-value>jdbc:mysql://localhost:3306/test_login?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</param-value>
@@ -33,5 +43,15 @@
         <param-name>password</param-name>
         <param-value>DiasTopaz3922</param-value>
     </context-param>
+
+    <error-page>
+        <error-code>403</error-code>
+        <location>/errorHTTPServlet</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorHTTPServlet</location>
+    </error-page>
 
 </web-app>
