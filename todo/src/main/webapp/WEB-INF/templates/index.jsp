@@ -51,6 +51,10 @@
                                 <c:param name="id" value="${todo.id}"/>
                             </c:url>
                             <a class="btn btn-danger" href="${todoDeleteUrl}"><i class="far fa-trash-alt"></i></a>
+                            <c:url value="/todos/basket" var="todoBasketUrl">
+                                <c:param name="id" value="${todo.id}"/>
+                            </c:url>
+                            <a class="btn btn-success" href="${todoBasketUrl}"><i class="fa-li fa fa-check-square"></i>В корзину</a>
                         </td>
                     </tr>
                     <%-- } --%>
