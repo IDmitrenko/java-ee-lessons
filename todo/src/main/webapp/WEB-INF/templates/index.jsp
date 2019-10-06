@@ -14,6 +14,7 @@
         <div class="col-12">
             <c:url value="/todos/new" var="todoNewUrl"/>
             <a class="btn btn-primary" href="${todoNewUrl}">Add Todo</a>
+            <h5 style="float: right;">Выбрано товаров ${requestScope.total}</h5>
         </div>
 
         <div class="col-12">
@@ -51,10 +52,10 @@
                                 <c:param name="id" value="${todo.id}"/>
                             </c:url>
                             <a class="btn btn-danger" href="${todoDeleteUrl}"><i class="far fa-trash-alt"></i></a>
-                            <c:url value="/todos/basket" var="todoBasketUrl">
+                            <c:url value="/todos/crate" var="todoCrateUrl">
                                 <c:param name="id" value="${todo.id}"/>
                             </c:url>
-                            <a class="btn btn-success" href="${todoBasketUrl}"><i class="fa-li fa fa-check-square"></i>В корзину</a>
+                            <a class="btn btn-success" href="${todoCrateUrl}"><i class="fa-li fa fa-check-square"></i>В корзину</a>
                         </td>
                     </tr>
                     <%-- } --%>

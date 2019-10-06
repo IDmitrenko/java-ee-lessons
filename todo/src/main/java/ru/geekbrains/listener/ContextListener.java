@@ -36,9 +36,15 @@ public class ContextListener implements ServletContextListener {
             sc.setAttribute("toDoRepo", toDoRepository);
 
             if (toDoRepository.findAll().isEmpty()) {
-                toDoRepository.insert(new ToDo(-1L, "First", LocalDate.now()));
-                toDoRepository.insert(new ToDo(-1L, "Second", LocalDate.now().plusDays(1)));
-                toDoRepository.insert(new ToDo(-1L, "Third", LocalDate.now().plusDays(2)));
+                toDoRepository.insert(new ToDo(-1L, "Apples", LocalDate.now()));
+                toDoRepository.insert(new ToDo(-1L, "Pears", LocalDate.now()));
+                toDoRepository.insert(new ToDo(-1L, "Oranges", LocalDate.now()));
+                toDoRepository.insert(new ToDo(-1L, "Pineapples", LocalDate.now()));
+                toDoRepository.insert(new ToDo(-1L, "Strawberry", LocalDate.now().plusDays(1)));
+                toDoRepository.insert(new ToDo(-1L, "Cherry", LocalDate.now().plusDays(1)));
+                toDoRepository.insert(new ToDo(-1L, "Lemons", LocalDate.now().plusDays(1)));
+                toDoRepository.insert(new ToDo(-1L, "Currant", LocalDate.now().plusDays(1)));
+                toDoRepository.insert(new ToDo(-1L, "Viburnum", LocalDate.now().plusDays(1)));
             }
         } catch (SQLException ex) {
             logger.error("", ex);

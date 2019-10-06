@@ -34,6 +34,7 @@ public class ToDoServlet extends HttpServlet {
         if (req.getPathInfo() == null || req.getPathInfo().equals("/")) {
             try {
                 req.setAttribute("todos", repository.findAll());
+                req.setAttribute("total", 4);
             } catch (SQLException ex) {
                 logger.error("", ex);
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
