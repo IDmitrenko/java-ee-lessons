@@ -14,7 +14,7 @@
         <div class="col-12">
             <c:url value="/todos/new" var="todoNewUrl"/>
             <a class="btn btn-primary" href="${todoNewUrl}">Add Todo</a>
-            <h5 style="float: right;">Выбрано товаров ${requestScope.total}</h5>
+            <h5 style="float: right;">Выбрано товаров : ${requestScope.total}</h5>
         </div>
 
         <div class="col-12">

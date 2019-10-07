@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.LinkedList;
+import java.util.List;
 
 @WebServlet(name = "ToDoServlet", urlPatterns = "/todos/*")
 public class ToDoServlet extends HttpServlet {
@@ -21,6 +23,7 @@ public class ToDoServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ToDoServlet.class);
 
     private ToDoRepository repository;
+    private List<ToDo> cartList = new LinkedList<>();
 
     @Override
     public void init() throws ServletException {
@@ -34,7 +37,6 @@ public class ToDoServlet extends HttpServlet {
         if (req.getPathInfo() == null || req.getPathInfo().equals("/")) {
             try {
                 req.setAttribute("todos", repository.findAll());
-                req.setAttribute("total", 4);
             } catch (SQLException ex) {
                 logger.error("", ex);
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -81,6 +83,33 @@ public class ToDoServlet extends HttpServlet {
                 logger.error("", ex);
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        } else if (req.getPathInfo().equals("/crate")) {
+            long id;
+            try {
+                id = Long.parseLong(req.getParameter("id"));
+            } catch (Exception ex) {
+                logger.error("", ex);
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+            ToDo toDo;
+            try {
+                toDo = repository.findById(id);
+            } catch (SQLException ex) {
+                logger.error("", ex);
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+            cartList.add(toDo);
+            req.setAttribute("total", cartList.size());
+            try {
+                req.setAttribute("todos", repository.findAll());
+            } catch (SQLException ex) {
+                logger.error("", ex);
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+            req.getRequestDispatcher("/WEB-INF/templates/index.jsp").forward(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -100,7 +129,7 @@ public class ToDoServlet extends HttpServlet {
             } catch (SQLException ex) {
                 logger.error("", ex);
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } catch (NumberFormatException|DateTimeParseException ex) {
+            } catch (NumberFormatException | DateTimeParseException ex) {
                 logger.error("", ex);
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
@@ -114,7 +143,7 @@ public class ToDoServlet extends HttpServlet {
             } catch (SQLException ex) {
                 logger.error("", ex);
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } catch (NumberFormatException|DateTimeParseException ex) {
+            } catch (NumberFormatException | DateTimeParseException ex) {
                 logger.error("", ex);
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
