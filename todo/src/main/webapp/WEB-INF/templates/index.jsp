@@ -13,8 +13,10 @@
     <div class="row py-2">
         <div class="col-12">
             <c:url value="/todos/new" var="todoNewUrl"/>
+            <c:url value="/todos/order" var="todoOrderUrl"/>
             <a class="btn btn-primary" href="${todoNewUrl}">Add Todo</a>
-            <h5 style="float: right;">Выбрано товаров : ${requestScope.total}</h5>
+            <h5 style="float: right">Выбрано товаров : ${requestScope.total}</h5>
+            <a style="float: end" class="btn btn-link" href="${todoOrderUrl}"> Оформить заказ </a>
         </div>
 
         <div class="col-12">

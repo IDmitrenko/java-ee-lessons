@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "ToDoServlet", urlPatterns = "/todos/*")
 public class ToDoServlet extends HttpServlet {
@@ -24,6 +26,7 @@ public class ToDoServlet extends HttpServlet {
 
     private ToDoRepository repository;
     private List<ToDo> cartList = new LinkedList<>();
+    private Map<ToDo, Integer> orderMap = new HashMap<>();
 
     @Override
     public void init() throws ServletException {
@@ -110,6 +113,18 @@ public class ToDoServlet extends HttpServlet {
                 return;
             }
             req.getRequestDispatcher("/WEB-INF/templates/index.jsp").forward(req, resp);
+        } else if (req.getPathInfo().equals("/order")) {
+            Integer value = null;
+            for (ToDo toDo : cartList) {
+                value = orderMap.get(toDo);
+                if (value == null) {
+                    orderMap.put(toDo, 1);
+                } else {
+                    orderMap.put(toDo, value + 1);
+                }
+            }
+            req.setAttribute("order", orderMap);
+            req.getRequestDispatcher("/WEB-INF/templates/order.jsp").forward(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
