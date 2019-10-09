@@ -23,6 +23,27 @@ public class ToDoRepository {
         }
     }
 
+    public void insertOrder(Order order) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "insert into orders(name, date, numbers, address, phone) values (?, ?, ?, ?, ?);")) {
+            stmt.setString(1, order.getName());
+            stmt.setDate(2, Date.valueOf(order.getDate()), Calendar.getInstance());
+            stmt.setInt(3, order.getNumbers());
+            stmt.setString(4, order.getAddress());
+            stmt.setString(5, order.getPhone());
+            stmt.execute();
+        }
+    }
+
+    public void insertContentsOrder(ContentsOrder contentsOrder) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "insert into contents_order(id_order, id_todo) values (?, ?);")) {
+            stmt.setLong(1, contentsOrder.getIdOrder());
+            stmt.setLong(2, contentsOrder.getIdTodo());
+            stmt.execute();
+        }
+    }
+
     public void update(ToDo toDo) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(
                 "update todos set description = ?, targetDate = ? where id = ?;")) {
@@ -54,6 +75,30 @@ public class ToDoRepository {
         return new ToDo(-1L, "", null);
     }
 
+    public int findLastNumber() throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "select numbers from orders order by numbers desc limit 1")) {
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public Long findLastOrderId() throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "select id from orders order by id desc limit 1")) {
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+        }
+        return 0L;
+    }
+
     public List<ToDo> findAll() throws SQLException {
         List<ToDo> res = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
@@ -72,6 +117,18 @@ public class ToDoRepository {
                     "\tid int auto_increment primary key,\n" +
                     "    description varchar(25),\n" +
                     "    targetDate date \n" +
+                    ");");
+            stmt.execute("create table if not exists orders (\n" +
+                    "\tid int auto_increment primary key,\n" +
+                    "    name varchar(96),\n" +
+                    "    date date,\n" +
+                    "    numbers int,\n" +
+                    "    address varchar(256),\n" +
+                    "    phone varchar(32) \n" +
+                    ");");
+            stmt.execute("create table if not exists contents_order (\n" +
+                    "\tid_order int,\n" +
+                    "    id_todo int \n" +
                     ");");
         }
     }

@@ -13,6 +13,7 @@
     <div class="row py-2">
         <div class="col-12">
             <c:url value="${requestScope.action}" var="todoOrderUrl"/>
+            <h5 class="text-success text-center"> Ваш заказ </h5>
         </div>
 
         <div class="col-12">
@@ -44,6 +45,11 @@
                 </c:forEach>
                 </tbody>
             </table>
+        </div>
+
+        <div class="col-12">
+            <c:url value="/todos/registration" var="todoRegistrationUrl"/>
+            <a style="float: right" class="btn btn-primary" href="${todoRegistrationUrl}"> Оформить заказ </a>
         </div>
     </div>
 </div>
