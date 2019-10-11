@@ -13,7 +13,14 @@
     <div class="row py-2">
         <div class="col-12">
             <c:url value="/todos/new" var="todoNewUrl"/>
+            <c:url value="/todos/order" var="todoOrderUrl"/>
+            <c:url value="/todos/title" var="todoTitleUrl"/>
             <a class="btn btn-primary" href="${todoNewUrl}">Add Todo</a>
+            <a class="btn btn-info" href="${todoTitleUrl}"> О компании </a>
+            <h5 class="text-warning" style="float: right">  Выбрано товаров : ${requestScope.total}</h5>
+        </div>
+        <div class="col-12">
+            <a style="float: right" class="btn btn-primary" href="${todoOrderUrl}"> Корзина </a>
         </div>
 
         <div class="col-12">
@@ -51,6 +58,14 @@
                                 <c:param name="id" value="${todo.id}"/>
                             </c:url>
                             <a class="btn btn-danger" href="${todoDeleteUrl}"><i class="far fa-trash-alt"></i></a>
+                            <c:url value="/todos/cart" var="todoCartUrl">
+                                <c:param name="id" value="${todo.id}"/>
+                            </c:url>
+                            <a class="btn btn-success" href="${todoCartUrl}"><i class="fa-li fa fa-check-square"></i>В корзину</a>
+                            <c:url value="todos/product" var="todoProductUrl">
+                                <c:param name="id" value="${todo.id}"/>"
+                            </c:url>
+                            <a class="btn btn-info" href="${todoProductUrl}"><i class="text-info"></i>О продукте</a>
                         </td>
                     </tr>
                     <%-- } --%>
