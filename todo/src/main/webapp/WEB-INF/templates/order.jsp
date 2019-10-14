@@ -48,7 +48,7 @@
         </div>
 
         <div class="col-12">
-            <c:url value="/todos/registration" var="todoRegistrationUrl"/>
+            <c:url value="/registration" var="todoRegistrationUrl"/>
             <a style="float: right" class="btn btn-primary" href="${todoRegistrationUrl}"> Оформить заказ </a>
         </div>
     </div>
