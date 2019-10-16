@@ -10,11 +10,14 @@ public class ToDo {
 
     private LocalDate targetDate;
 
+    private int idCategory;
+
     public ToDo() {
     }
 
-    public ToDo(Long id, String description, LocalDate targetDate) {
+    public ToDo(Long id, int idCategory, String description, LocalDate targetDate) {
         this.id = id;
+        this.idCategory = idCategory;
         this.description = description;
         this.targetDate = targetDate;
     }
@@ -43,6 +46,14 @@ public class ToDo {
         this.targetDate = targetDate;
     }
 
+    public int getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,6 +61,7 @@ public class ToDo {
 
         ToDo toDo = (ToDo) o;
 
+        if (idCategory != toDo.idCategory) return false;
         if (id != null ? !id.equals(toDo.id) : toDo.id != null) return false;
         if (description != null ? !description.equals(toDo.description) : toDo.description != null) return false;
         return targetDate != null ? targetDate.equals(toDo.targetDate) : toDo.targetDate == null;
@@ -60,6 +72,7 @@ public class ToDo {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (targetDate != null ? targetDate.hashCode() : 0);
+        result = 31 * result + idCategory;
         return result;
     }
 }

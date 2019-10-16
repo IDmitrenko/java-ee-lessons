@@ -34,16 +34,21 @@ public class ToDoRepository {
         try {
             this.conn = DriverManager.getConnection(jdbcConnectionString, username, password);
 
-            if (this.findAll().isEmpty()) {
-                this.insert(new ToDo(-1L, "Apples", LocalDate.now()));
-                this.insert(new ToDo(-1L, "Pears", LocalDate.now()));
-                this.insert(new ToDo(-1L, "Oranges", LocalDate.now()));
-                this.insert(new ToDo(-1L, "Pineapples", LocalDate.now()));
-                this.insert(new ToDo(-1L, "Strawberry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, "Cherry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, "Lemons", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, "Currant", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, "Viburnum", LocalDate.now().plusDays(1)));
+            if (this.findAllCategory().isEmpty()) {
+                this.insertCategory(new Category(-1, "Фрукты"));
+                this.insertCategory(new Category(-1, "Овощи"));
+
+                if (this.findAll().isEmpty()) {
+                    this.insert(new ToDo(-1L, 1, "Apples", LocalDate.now()));
+                    this.insert(new ToDo(-1L, 1, "Pears", LocalDate.now()));
+                    this.insert(new ToDo(-1L, 1, "Oranges", LocalDate.now()));
+                    this.insert(new ToDo(-1L, 1, "Pineapples", LocalDate.now()));
+                    this.insert(new ToDo(-1L, 1, "Strawberry", LocalDate.now().plusDays(1)));
+                    this.insert(new ToDo(-1L, 1, "Cherry", LocalDate.now().plusDays(1)));
+                    this.insert(new ToDo(-1L, 1, "Lemons", LocalDate.now().plusDays(1)));
+                    this.insert(new ToDo(-1L, 1, "Currant", LocalDate.now().plusDays(1)));
+                    this.insert(new ToDo(-1L, 1, "Viburnum", LocalDate.now().plusDays(1)));
+                }
             }
         } catch (SQLException ex) {
             logger.error("", ex);
@@ -57,6 +62,14 @@ public class ToDoRepository {
                 "insert into todos(description, targetDate) values (?, ?);")) {
             stmt.setString(1, toDo.getDescription());
             stmt.setDate(2, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
+            stmt.execute();
+        }
+    }
+
+    public void insertCategory(Category category) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "insert into category(name) values (?);")) {
+            stmt.setString(1, category.getName());
             stmt.execute();
         }
     }
@@ -107,10 +120,10 @@ public class ToDoRepository {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new ToDo(rs.getLong(1), rs.getString(2), rs.getDate(3, Calendar.getInstance()).toLocalDate());
+                return new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getDate(4, Calendar.getInstance()).toLocalDate());
             }
         }
-        return new ToDo(-1L, "", null);
+        return new ToDo(-1L, -1, "", null);
     }
 
     public int findLastNumber() throws SQLException {
@@ -140,13 +153,25 @@ public class ToDoRepository {
     public List<ToDo> findAll() throws SQLException {
         List<ToDo> res = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery("select id, description, targetDate from todos");
+            ResultSet rs = stmt.executeQuery("select id, idCategory, description, targetDate from todos");
 
             while (rs.next()) {
-                res.add(new ToDo(rs.getLong(1), rs.getString(2), rs.getDate(3, Calendar.getInstance()).toLocalDate()));
+                res.add(new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getDate(4, Calendar.getInstance()).toLocalDate()));
             }
         }
         return res;
+    }
+
+    public List<Category> findAllCategory() throws SQLException {
+        List<Category> categoryList = new ArrayList<>();
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery("select id, name from category");
+
+            while (rs.next()) {
+                categoryList.add(new Category(rs.getInt(1), rs.getString(2)));
+            }
+        }
+        return categoryList;
     }
 
     private void createTableIfNotExists(Connection conn) throws SQLException {
@@ -167,6 +192,10 @@ public class ToDoRepository {
             stmt.execute("create table if not exists contents_order (\n" +
                     "\tid_order int,\n" +
                     "    id_todo int \n" +
+                    ");");
+            stmt.execute("create table if not exists category (\n" +
+                    "\tid int auto_increment primary key,\n" +
+                    "   name varchar(64) \n" +
                     ");");
         }
     }
