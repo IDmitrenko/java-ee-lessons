@@ -21,18 +21,17 @@ public class ToDoRepository {
     private static final Logger logger = LoggerFactory.getLogger(ToDoRepository.class);
 
     @Inject
-    private ServletContext sc;
+    private DataSource dataSource;
 
     private Connection conn;
 
     @PostConstruct
     public void init() throws SQLException {
-        String jdbcConnectionString = sc.getInitParameter("jdbcConnectionString");
-        String username = sc.getInitParameter("username");
-        String password = sc.getInitParameter("password");
+
+        this.conn = dataSource.getConnection();
 
         try {
-            this.conn = DriverManager.getConnection(jdbcConnectionString, username, password);
+            createTableIfNotExists(conn);
 
             if (this.findAllCategory().isEmpty()) {
                 this.insertCategory(new Category(-1, "Фрукты"));
@@ -53,23 +52,22 @@ public class ToDoRepository {
         } catch (SQLException ex) {
             logger.error("", ex);
         }
-
-        createTableIfNotExists(conn);
     }
 
     public void insert(ToDo toDo) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(
-                "insert into todos(description, targetDate) values (?, ?);")) {
-            stmt.setString(1, toDo.getDescription());
-            stmt.setDate(2, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
+                "insert into todos(idCategory, description, targetDate) values (?, ?, ?);")) {
+            stmt.setInt(1, toDo.getIdCategory());
+            stmt.setString(2, toDo.getDescription());
+            stmt.setDate(3, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
             stmt.execute();
         }
     }
 
     public void insertCategory(Category category) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(
-                "insert into category(name) values (?);")) {
-            stmt.setString(1, category.getName());
+                "insert into category(description) values (?);")) {
+            stmt.setString(1, category.getDescription());
             stmt.execute();
         }
     }
@@ -97,10 +95,20 @@ public class ToDoRepository {
 
     public void update(ToDo toDo) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(
-                "update todos set description = ?, targetDate = ? where id = ?;")) {
-            stmt.setString(1, toDo.getDescription());
-            stmt.setDate(2, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
-            stmt.setLong(3, toDo.getId());
+                "update todos set idCategory = ?, description = ?, targetDate = ? where id = ?;")) {
+            stmt.setInt(1, toDo.getIdCategory());
+            stmt.setString(2, toDo.getDescription());
+            stmt.setDate(3, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
+            stmt.setLong(4, toDo.getId());
+            stmt.execute();
+        }
+    }
+
+    public void updateCategory(Category category) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "update category set description = ? where id = ?;")) {
+            stmt.setString(1, category.getDescription());
+            stmt.setLong(2, category.getId());
             stmt.execute();
         }
     }
@@ -113,9 +121,17 @@ public class ToDoRepository {
         }
     }
 
+    public void deleteCategory(int id) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "delete from category where id = ?;")) {
+            stmt.setLong(1, id);
+            stmt.execute();
+        }
+    }
+
     public ToDo findById(long id) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(
-                "select id, description, targetDate from todos where id = ?")) {
+                "select id, idCategory, description, targetDate from todos where id = ?")) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -165,7 +181,7 @@ public class ToDoRepository {
     public List<Category> findAllCategory() throws SQLException {
         List<Category> categoryList = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery("select id, name from category");
+            ResultSet rs = stmt.executeQuery("select id, description from category");
 
             while (rs.next()) {
                 categoryList.add(new Category(rs.getInt(1), rs.getString(2)));
@@ -178,7 +194,8 @@ public class ToDoRepository {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute("create table if not exists todos (\n" +
                     "\tid int auto_increment primary key,\n" +
-                    "    description varchar(25),\n" +
+                    "    idCategory int, \n" +
+                    "    description varchar(64),\n" +
                     "    targetDate date \n" +
                     ");");
             stmt.execute("create table if not exists orders (\n" +
@@ -195,7 +212,7 @@ public class ToDoRepository {
                     ");");
             stmt.execute("create table if not exists category (\n" +
                     "\tid int auto_increment primary key,\n" +
-                    "   name varchar(64) \n" +
+                    "    description varchar(64) \n" +
                     ");");
         }
     }

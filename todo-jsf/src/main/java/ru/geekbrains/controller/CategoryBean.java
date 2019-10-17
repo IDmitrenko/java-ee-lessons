@@ -3,7 +3,6 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
-import ru.geekbrains.persist.ToDo;
 import ru.geekbrains.persist.ToDoRepository;
 
 import javax.enterprise.context.SessionScoped;
@@ -28,12 +27,12 @@ public class CategoryBean implements Serializable {
         return category;
     }
 
-    public List<Category> getAllCategory() throws SQLException {
-        return toDoRepository.findAllCategory();
-    }
-
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Category> getAllCategory() throws SQLException {
+        return toDoRepository.findAllCategory();
     }
 
     public String createCategory() {
@@ -47,7 +46,7 @@ public class CategoryBean implements Serializable {
         } else{
             toDoRepository.updateCategory(category);
         }
-        return "/category.xhtml?faces-redirect=true";
+        return "/categoryList.xhtml?faces-redirect=true";
     }
 
     public void deleteCategory(Category category) throws SQLException {
@@ -58,5 +57,9 @@ public class CategoryBean implements Serializable {
     public String editCategory(Category category) {
         this.category = category;
         return "/category.xhtml?faces-redirect=true";
+    }
+
+    public String showCategory() {
+        return "/categoryList.xhtml?faces-redirect=true";
     }
 }

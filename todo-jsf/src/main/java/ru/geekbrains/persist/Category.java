@@ -4,11 +4,11 @@ public class Category {
 
     private int id;
 
-    private String name;
+    private String description;
 
-    public Category(int id, String name) {
+    public Category(int id, String description) {
         this.id = id;
-        this.name = name;
+        this.description = description;
     }
 
     public Category() {
@@ -22,12 +22,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -38,13 +38,13 @@ public class Category {
         Category category = (Category) o;
 
         if (id != category.id) return false;
-        return name != null ? name.equals(category.name) : category.name == null;
+        return description != null ? description.equals(category.description) : category.description == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 }
