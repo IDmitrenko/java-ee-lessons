@@ -169,10 +169,12 @@ public class ToDoRepository {
     public List<ToDo> findAll() throws SQLException {
         List<ToDo> res = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery("select id, idCategory, description, targetDate from todos");
+            ResultSet rs = stmt.executeQuery("select t.id, t.idCategory, t.description, t.targetDate, c.description from todos t inner join category c on t.idCategory = c.id");
 
             while (rs.next()) {
-                res.add(new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getDate(4, Calendar.getInstance()).toLocalDate()));
+                res.add(new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3),
+                        rs.getDate(4, Calendar.getInstance()).toLocalDate()
+                        , rs.getString(5)));
             }
         }
         return res;

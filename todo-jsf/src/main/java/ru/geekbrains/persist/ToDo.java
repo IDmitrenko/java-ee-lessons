@@ -11,8 +11,18 @@ public class ToDo {
     private LocalDate targetDate;
 
     private int idCategory;
+    private String categoryDescription;
 
     public ToDo() {
+    }
+
+
+    public ToDo(Long id, int idCategory, String description, LocalDate targetDate, String categoryDescription) {
+        this.id = id;
+        this.idCategory = idCategory;
+        this.description = description;
+        this.targetDate = targetDate;
+        this.categoryDescription = categoryDescription;
     }
 
     public ToDo(Long id, int idCategory, String description, LocalDate targetDate) {
@@ -52,6 +62,14 @@ public class ToDo {
 
     public void setIdCategory(int idCategory) {
         this.idCategory = idCategory;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
     }
 
     @Override
