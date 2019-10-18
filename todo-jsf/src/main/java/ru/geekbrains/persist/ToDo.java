@@ -1,11 +1,13 @@
 package ru.geekbrains.persist;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class ToDo {
 
     private Long id;
 
+    @NotNull
     private String description;
 
     private LocalDate targetDate;
@@ -15,7 +17,6 @@ public class ToDo {
 
     public ToDo() {
     }
-
 
     public ToDo(Long id, int idCategory, String description, LocalDate targetDate, String categoryDescription) {
         this.id = id;

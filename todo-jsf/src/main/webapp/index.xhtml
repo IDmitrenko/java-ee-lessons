@@ -41,6 +41,8 @@
                 <div class="col-12">
                     <h:commandButton value="Add Todo" styleClass="btn btn-primary" action="#{todoBean.createTodo()}"/>
                     <h:commandButton value="Category" styleClass="btn btn-primary" action="#{categoryBean.showCategory()}"/>
+                    <h:outputText id="output" style="float: right" value="#{cartBean.number}"/>
+                    <h:commandButton value="Cart" styleClass="btn btn-primary" style="float: right" action="#{cartBean.orderTodo()}"/>
                 </div>
 
                 <div class="col-12">
@@ -75,6 +77,8 @@
                                              action="#{todoBean.deleteTodo(todo)}">
                                 <f:ajax event="click" render="todosForm"/>
                             </h:commandButton>
+                            <h:commandButton value="In Cart" styleClass="btn btn-success"
+                                             action="#{cartBean.addCartTodo(todo)}"/>
                         </h:column>
 
                     </h:dataTable>
