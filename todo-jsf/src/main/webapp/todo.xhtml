@@ -51,12 +51,25 @@
                     </div>
 
                     <div class="form-group">
+                        <h:outputLabel value="Category"/>
+<!--
+                        <h:form id="categoryForm">
+                            <h:outputText id="category" value="#{categoryBean.insCategory()}"/>
+                        </h:form>
+-->
+                        <h:commandButton value="Selected category" styleClass="btn btn-success"
+                                         action="#{categoryBean.showCategory}">
+<!--                            <f:ajax event="click" render="categoryForm"/>-->
+                        </h:commandButton>
+                    </div>
+
+                    <div class="form-group">
                         <h:outputLabel value="Target date"/>
                         <h:inputText p:type="date" class="form-control" id="targetDate" name="targetDate"
                                      value="#{todoBean.toDo.targetDate}"
                                      validatorMessage="The date is entered using a template : yyyy-MM-dd">
                             <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
-<!--                            <f:validateRegex pattern="yyyy-MM-dd"/>-->
+                            <!--                            <f:validateRegex pattern="yyyy-MM-dd"/>-->
                         </h:inputText>
                     </div>
 

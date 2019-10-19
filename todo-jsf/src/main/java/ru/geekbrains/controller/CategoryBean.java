@@ -21,6 +21,9 @@ public class CategoryBean implements Serializable {
     @Inject
     private ToDoRepository toDoRepository;
 
+    @Inject
+    private TodoBean todoBean;
+
     private Category category;
 
     public Category getCategory() {
@@ -47,6 +50,18 @@ public class CategoryBean implements Serializable {
             toDoRepository.updateCategory(category);
         }
         return "/categoryList.xhtml?faces-redirect=true";
+    }
+
+    public String selectCategory(Category category) {
+        todoBean.getToDo().setIdCategory(category.getId());
+        return "/todo.xhtml?faces-redirect=true";
+    }
+
+    public String insCategory() {
+        if (category != null) {
+            return category.getDescription();
+        }
+        return new String(new char[64]).replace("\0", " ");
     }
 
     public void deleteCategory(Category category) throws SQLException {

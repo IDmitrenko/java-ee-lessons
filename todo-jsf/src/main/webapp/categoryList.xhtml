@@ -64,6 +64,8 @@
                                              action="#{categoryBean.deleteCategory(category)}">
                                 <f:ajax event="click" render="categoriesForm"/>
                             </h:commandButton>
+                            <h:commandButton value="Select" styleClass="btn btn-success"
+                                             action="#{categoryBean.selectCategory(category)}"/>
                         </h:column>
 
                     </h:dataTable>
