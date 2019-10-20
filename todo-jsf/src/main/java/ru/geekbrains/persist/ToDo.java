@@ -2,6 +2,8 @@ package ru.geekbrains.persist;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class ToDo {
 
@@ -51,6 +53,21 @@ public class ToDo {
 
     public LocalDate getTargetDate() {
         return targetDate;
+    }
+
+    public void setTargetDateAsLocal(Date date) {
+        if (date != null) {
+            targetDate = date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+        }
+    }
+
+    public Date getTargetDateAsLocal() {
+        if (targetDate != null) {
+            return Date.from(targetDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
     }
 
     public void setTargetDate(LocalDate targetDate) {

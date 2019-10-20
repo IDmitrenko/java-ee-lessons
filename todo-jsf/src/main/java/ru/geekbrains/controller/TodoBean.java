@@ -21,6 +21,9 @@ public class TodoBean implements Serializable {
     @Inject
     private ToDoRepository toDoRepository;
 
+    @Inject
+    private CategoryBean categoryBean;
+
     private ToDo toDo;
 
     public ToDo getToDo() {
@@ -42,8 +45,9 @@ public class TodoBean implements Serializable {
 
     public String saveTodo() throws SQLException {
         if (toDo.getId() == null) {
+            categoryBean.setShowSelect(false);
             toDoRepository.insert(toDo);
-        } else{
+        } else {
             toDoRepository.update(toDo);
         }
         return "/index.xhtml?faces-redirect=true";

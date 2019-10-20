@@ -18,6 +18,16 @@ public class CategoryBean implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryBean.class);
 
+    private boolean showSelect = false;
+
+    public boolean isShowSelect() {
+        return showSelect;
+    }
+
+    public void setShowSelect(boolean showSelect) {
+        this.showSelect = showSelect;
+    }
+
     @Inject
     private ToDoRepository toDoRepository;
 
@@ -54,14 +64,8 @@ public class CategoryBean implements Serializable {
 
     public String selectCategory(Category category) {
         todoBean.getToDo().setIdCategory(category.getId());
+        this.category = category;
         return "/todo.xhtml?faces-redirect=true";
-    }
-
-    public String insCategory() {
-        if (category != null) {
-            return category.getDescription();
-        }
-        return new String(new char[64]).replace("\0", " ");
     }
 
     public void deleteCategory(Category category) throws SQLException {
@@ -74,7 +78,8 @@ public class CategoryBean implements Serializable {
         return "/category.xhtml?faces-redirect=true";
     }
 
-    public String showCategory() {
+    public String showCategory(boolean showSelect) {
+        this.showSelect = showSelect;
         return "/categoryList.xhtml?faces-redirect=true";
     }
 }

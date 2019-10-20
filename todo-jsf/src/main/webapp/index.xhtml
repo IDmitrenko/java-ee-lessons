@@ -40,7 +40,7 @@
             <div class="row py-2">
                 <div class="col-12">
                     <h:commandButton value="Add Todo" styleClass="btn btn-primary" action="#{todoBean.createTodo()}"/>
-                    <h:commandButton value="Category" styleClass="btn btn-primary" action="#{categoryBean.showCategory()}"/>
+                    <h:commandButton value="Category" styleClass="btn btn-primary" action="#{categoryBean.showCategory(false)}"/>
                     <h:outputText id="output" style="float: right" value="#{cartBean.number}"/>
                     <h:commandButton value="Cart" styleClass="btn btn-primary" style="float: right" action="#{cartBean.orderTodo()}"/>
                 </div>
