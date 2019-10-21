@@ -48,23 +48,26 @@
                                      requiredMessage="The field should not be empty!">
                             <f:validateRequired/>
                         </h:inputText>
+                        <h:message for="description" style="color: red"/>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel value="Target date"/>
+                        <h:inputText p:type="date" class="form-control" id="targetDate" name="targetDate"
+                                     value="#{todoBean.toDo.targetDateAsLocal}" required="true"
+                                     validatorMessage="The date is entered using a template : yyyy-MM-dd">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                            <f:validateRequired/>
+                        </h:inputText>
+                        <h:message for="targetDate" style="color: red"/>
                     </div>
 
                     <div class="form-group">
                         <h:outputLabel value="Category"/>
                         <h:commandButton value="Selected category" styleClass="btn btn-secondary"
                                          action="#{categoryBean.showCategory(true)}"/>
-                        <h:outputText styleClass="form-control" value="#{categoryBean.category.description}"/>
-                    </div>
-
-                    <div class="form-group">
-                        <h:outputLabel value="Target date"/>
-                        <h:inputText p:type="date" class="form-control" id="targetDate" name="targetDate"
-                                     value="#{todoBean.toDo.targetDateAsLocal}"
-                                     validatorMessage="The date is entered using a template : yyyy-MM-dd">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
-                            <!--                            <f:validateRegex pattern="yyyy-MM-dd"/>-->
-                        </h:inputText>
+                        <h:outputText styleClass="form-control" value="#{categoryBean.category.description}"
+                                      id="category" />
                     </div>
 
                     <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{todoBean.saveTodo()}"/>

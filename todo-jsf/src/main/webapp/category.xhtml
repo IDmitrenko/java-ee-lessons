@@ -44,7 +44,11 @@
                     <div class="form-group">
                         <h:outputLabel value="Description"/>
                         <h:inputText styleClass="form-control" id="description" value="#{categoryBean.category.description}"
-                                     placeholder="Enter description"/>
+                                     placeholder="Enter description" required="true"
+                                     validatorMessage="Вы должны использовать только буквы русского и английского алфавитов">
+                            <f:validateRegex pattern="(^[а-яА-Яa-zA-Z\s]+(.)?[\s]*)$" />
+                        </h:inputText>
+                        <h:message for="description" style="color: red"/>
                     </div>
 
                     <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{categoryBean.saveCategory()}"/>
