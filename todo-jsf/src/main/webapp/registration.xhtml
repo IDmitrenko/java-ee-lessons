@@ -60,9 +60,8 @@
 
                     <div class="form-group">
                         <h:outputLabel value="Phone"/>
-                        <h:inputText p:type="tel" pattern="+[0-9]{1}([0-9]{3})[0-9]{3}-[0-9]{2}-[0-9]{2}"
-                                     class="form-control" id="phone" required="true"
-                                     value="#{orderBean.order.phone}"
+                        <h:inputText styleClass="form-control" id="phone" value="#{orderBean.order.phone}"
+                                     placeholder="Введите номер телефона в формате +7(495)619-01-08" required="true"
                                      validatorMessage="Вы должны ввести номер телефона соответствующий шаблону  +7(495)619-01-08">
                             <f:validateRegex pattern="^+[0-9]{1}([0-9]{3})[0-9]{3}-[0-9]{2}-[0-9]{2}$"/>
                         </h:inputText>
