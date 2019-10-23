@@ -1,20 +1,36 @@
 package ru.geekbrains.persist;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class ToDo {
 
     private Long id;
 
+    @NotNull
     private String description;
 
     private LocalDate targetDate;
 
+    private int idCategory;
+    private String categoryDescription;
+
     public ToDo() {
     }
 
-    public ToDo(Long id, String description, LocalDate targetDate) {
+    public ToDo(Long id, int idCategory, String description, LocalDate targetDate, String categoryDescription) {
         this.id = id;
+        this.idCategory = idCategory;
+        this.description = description;
+        this.targetDate = targetDate;
+        this.categoryDescription = categoryDescription;
+    }
+
+    public ToDo(Long id, int idCategory, String description, LocalDate targetDate) {
+        this.id = id;
+        this.idCategory = idCategory;
         this.description = description;
         this.targetDate = targetDate;
     }
@@ -39,8 +55,39 @@ public class ToDo {
         return targetDate;
     }
 
+    public void setTargetDateAsLocal(Date date) {
+        if (date != null) {
+            targetDate = date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+        }
+    }
+
+    public Date getTargetDateAsLocal() {
+        if (targetDate != null) {
+            return Date.from(targetDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+
     public void setTargetDate(LocalDate targetDate) {
         this.targetDate = targetDate;
+    }
+
+    public int getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
     }
 
     @Override
@@ -50,6 +97,7 @@ public class ToDo {
 
         ToDo toDo = (ToDo) o;
 
+        if (idCategory != toDo.idCategory) return false;
         if (id != null ? !id.equals(toDo.id) : toDo.id != null) return false;
         if (description != null ? !description.equals(toDo.description) : toDo.description != null) return false;
         return targetDate != null ? targetDate.equals(toDo.targetDate) : toDo.targetDate == null;
@@ -60,6 +108,7 @@ public class ToDo {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (targetDate != null ? targetDate.hashCode() : 0);
+        result = 31 * result + idCategory;
         return result;
     }
 }

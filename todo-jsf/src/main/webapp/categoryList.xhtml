@@ -18,7 +18,7 @@
 <h:body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">ToDo</a>
+        <a class="navbar-brand" href="#">Category</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,49 +36,36 @@
 
     <div class="container">
 
-        <h:form id="todosForm">
+        <h:form id="categoriesForm">
             <div class="row py-2">
                 <div class="col-12">
-                    <h:commandButton value="Add Todo" styleClass="btn btn-primary" action="#{todoBean.createTodo()}"/>
-                    <h:commandButton value="Category" styleClass="btn btn-primary" action="#{categoryBean.showCategory(false)}"/>
-                    <h:outputText id="output" style="float: right" value="#{cartBean.number}"/>
-                    <h:commandButton value="Cart" styleClass="btn btn-primary" style="float: right" action="#{cartBean.orderTodo()}"/>
+                    <h:commandButton value="Add Category" styleClass="btn btn-primary" action="#{categoryBean.createCategory()}"/>
                 </div>
 
                 <div class="col-12">
-                    <h:dataTable value="#{todoBean.allTodo}" var="todo"
+                    <h:dataTable value="#{categoryBean.allCategory}" var="category"
                                  styleClass="table table-bordered my-2">
 
                         <h:column>
                             <f:facet name="header">Id</f:facet>
-                            #{todo.id}
-                        </h:column>
-
-                        <h:column>
-                            <f:facet name="header">Category</f:facet>
-                            #{todo.idCategory} - #{todo.categoryDescription}
+                            #{category.id}
                         </h:column>
 
                         <h:column>
                             <f:facet name="header">Description</f:facet>
-                            #{todo.description}
-                        </h:column>
-
-                        <h:column>
-                            <f:facet name="header">Target date</f:facet>
-                            #{todo.targetDate}
+                            #{category.description}
                         </h:column>
 
                         <h:column>
                             <f:facet name="header">Actions</f:facet>
                             <h:commandButton value="Edit" styleClass="btn btn-success"
-                                             action="#{todoBean.editTodo(todo)}"/>
+                                             action="#{categoryBean.editCategory(category)}"/>
                             <h:commandButton value="Delete" styleClass="btn btn-danger"
-                                             action="#{todoBean.deleteTodo(todo)}">
-                                <f:ajax event="click" render="todosForm"/>
+                                             action="#{categoryBean.deleteCategory(category)}">
+                                <f:ajax event="click" render="categoriesForm"/>
                             </h:commandButton>
-                            <h:commandButton value="In Cart" styleClass="btn btn-success"
-                                             action="#{cartBean.addCartTodo(todo)}"/>
+                            <h:commandButton value="Select" styleClass="btn btn-success" rendered="#{categoryBean.showSelect}"
+                                             action="#{categoryBean.selectCategory(category)}"/>
                         </h:column>
 
                     </h:dataTable>

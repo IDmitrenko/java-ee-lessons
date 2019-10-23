@@ -1,6 +1,4 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
@@ -14,7 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
-    <title>ToDo</title>
+    <title>ToDo list application</title>
 </h:head>
 
 <h:body>
@@ -24,7 +22,7 @@
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"/>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -37,43 +35,53 @@
     </nav>
 
     <div class="container">
-        <div class="row py-2">
-            <div class="col-12">
-                <h:form id="todoForm">
 
-                    <div class="form-group">
-                        <h:outputLabel value="Description"/>
-                        <h:inputText styleClass="form-control" id="description" value="#{todoBean.toDo.description}"
-                                     placeholder="Enter description" required="true"
-                                     requiredMessage="The field should not be empty!">
-                            <f:validateRequired/>
-                        </h:inputText>
-                        <h:message for="description" style="color: red"/>
-                    </div>
+        <h:form id="ordersForm">
+            <div class="row py-2">
+                <div class="col-12">
+                    <h3><h:outputText style="display: block; text-align: center" value="Your order"/></h3>
+                </div>
 
-                    <div class="form-group">
-                        <h:outputLabel value="Target date"/>
-                        <h:inputText p:type="date" class="form-control" id="targetDate" name="targetDate"
-                                     value="#{todoBean.toDo.targetDateAsLocal}" required="true"
-                                     validatorMessage="The date is entered using a template : yyyy-MM-dd">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
-                            <f:validateRequired/>
-                        </h:inputText>
-                        <h:message for="targetDate" style="color: red"/>
-                    </div>
+                <div class="col-12">
+                    <h:dataTable value="#{cartBean.orderMap}" var="order"
+                                 styleClass="table table-bordered my-2">
 
-                    <div class="form-group">
-                        <h:outputLabel value="Category"/>
-                        <h:commandButton value="Selected category" styleClass="btn btn-secondary"
-                                         action="#{categoryBean.showCategory(true)}"/>
-                        <h:outputText styleClass="form-control" value="#{categoryBean.category.description}"
-                                      id="category" />
-                    </div>
+                        <h:column>
+                            <f:facet name="header">Id</f:facet>
+                            #{order.key.id}
+                        </h:column>
 
-                    <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{todoBean.saveTodo()}"/>
-                </h:form>
+                        <h:column>
+                            <f:facet name="header">Category</f:facet>
+                            #{order.key.categoryDescription}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Description</f:facet>
+                            #{order.key.description}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Target date</f:facet>
+                            #{order.key.targetDate}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Count</f:facet>
+                            #{order.value}
+                        </h:column>
+
+                    </h:dataTable>
+                </div>
+
+                <div class="col-12">
+                    <h:commandButton value="Place your order" style="float: right"
+                                     styleClass="btn btn-primary"
+                                     action="#{orderBean.registrationOrder()}"/>
+                </div>
+
             </div>
-        </div>
+        </h:form>
     </div>
 
     <!-- Optional JavaScript -->
@@ -87,7 +95,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-
 </h:body>
-
 </html>
