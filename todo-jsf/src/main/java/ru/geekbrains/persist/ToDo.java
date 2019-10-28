@@ -1,20 +1,29 @@
 package ru.geekbrains.persist;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+@Entity
+@Table(name = "todos")
 public class ToDo {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
+    @Column(nullable = false, length = 4096)
     private String description;
 
+    @Column
     private LocalDate targetDate;
 
+    @Column
     private int idCategory;
+
     private String categoryDescription;
 
     public ToDo() {

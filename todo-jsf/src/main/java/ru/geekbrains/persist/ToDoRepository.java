@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,48 +21,34 @@ public class ToDoRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(ToDoRepository.class);
 
-    @Inject
-    private DataSource dataSource;
-
-    private Connection conn;
+    @PersistenceContext(unitName = "ds")
+    private EntityManager em;
 
     @PostConstruct
-    public void init() throws SQLException {
+    public void init() {
 
-        this.conn = dataSource.getConnection();
+        if (this.findAllCategory().isEmpty()) {
+            this.insertCategory(new Category(-1, "Фрукты"));
+            this.insertCategory(new Category(-1, "Овощи"));
 
-        try {
-            createTableIfNotExists(conn);
-
-            if (this.findAllCategory().isEmpty()) {
-                this.insertCategory(new Category(-1, "Фрукты"));
-                this.insertCategory(new Category(-1, "Овощи"));
-
-                if (this.findAll().isEmpty()) {
-                    this.insert(new ToDo(-1L, 1, "Apples", LocalDate.now()));
-                    this.insert(new ToDo(-1L, 1, "Pears", LocalDate.now()));
-                    this.insert(new ToDo(-1L, 1, "Oranges", LocalDate.now()));
-                    this.insert(new ToDo(-1L, 1, "Pineapples", LocalDate.now()));
-                    this.insert(new ToDo(-1L, 1, "Strawberry", LocalDate.now().plusDays(1)));
-                    this.insert(new ToDo(-1L, 1, "Cherry", LocalDate.now().plusDays(1)));
-                    this.insert(new ToDo(-1L, 1, "Lemons", LocalDate.now().plusDays(1)));
-                    this.insert(new ToDo(-1L, 1, "Currant", LocalDate.now().plusDays(1)));
-                    this.insert(new ToDo(-1L, 1, "Viburnum", LocalDate.now().plusDays(1)));
-                }
+            if (this.findAll().isEmpty()) {
+                this.insert(new ToDo(-1L, 1, "Apples", LocalDate.now()));
+                this.insert(new ToDo(-1L, 1, "Pears", LocalDate.now()));
+                this.insert(new ToDo(-1L, 1, "Oranges", LocalDate.now()));
+                this.insert(new ToDo(-1L, 1, "Pineapples", LocalDate.now()));
+                this.insert(new ToDo(-1L, 1, "Strawberry", LocalDate.now().plusDays(1)));
+                this.insert(new ToDo(-1L, 1, "Cherry", LocalDate.now().plusDays(1)));
+                this.insert(new ToDo(-1L, 1, "Lemons", LocalDate.now().plusDays(1)));
+                this.insert(new ToDo(-1L, 1, "Currant", LocalDate.now().plusDays(1)));
+                this.insert(new ToDo(-1L, 1, "Viburnum", LocalDate.now().plusDays(1)));
             }
-        } catch (SQLException ex) {
-            logger.error("", ex);
         }
     }
 
-    public void insert(ToDo toDo) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "insert into todos(idCategory, description, targetDate) values (?, ?, ?);")) {
-            stmt.setInt(1, toDo.getIdCategory());
-            stmt.setString(2, toDo.getDescription());
-            stmt.setDate(3, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
-            stmt.execute();
-        }
+    @Transactional
+    public void insert(ToDo toDo) {
+        // добавление информации через EntityManager
+        em.persist(toDo);
     }
 
     public void insertCategory(Category category) throws SQLException {
@@ -93,15 +80,9 @@ public class ToDoRepository {
         }
     }
 
-    public void update(ToDo toDo) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "update todos set idCategory = ?, description = ?, targetDate = ? where id = ?;")) {
-            stmt.setInt(1, toDo.getIdCategory());
-            stmt.setString(2, toDo.getDescription());
-            stmt.setDate(3, Date.valueOf(toDo.getTargetDate()), Calendar.getInstance());
-            stmt.setLong(4, toDo.getId());
-            stmt.execute();
-        }
+    @Transactional
+    public void update(ToDo toDo) {
+        em.merge(toDo);
     }
 
     public void updateCategory(Category category) throws SQLException {
@@ -113,11 +94,11 @@ public class ToDoRepository {
         }
     }
 
-    public void delete(long id) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "delete from todos where id = ?;")) {
-            stmt.setLong(1, id);
-            stmt.execute();
+    @Transactional
+    public void delete(long id) {
+        ToDo toDo = em.find(ToDo.class, id);
+        if (toDo != null) {
+            em.remove(toDo);
         }
     }
 
@@ -129,17 +110,8 @@ public class ToDoRepository {
         }
     }
 
-    public ToDo findById(long id) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "select id, idCategory, description, targetDate from todos where id = ?")) {
-            stmt.setLong(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getDate(4, Calendar.getInstance()).toLocalDate());
-            }
-        }
-        return new ToDo(-1L, -1, "", null);
+    public ToDo findById(long id) {
+        return em.find(ToDo.class, id);
     }
 
     public int findLastNumber() throws SQLException {
@@ -166,21 +138,8 @@ public class ToDoRepository {
         return 0L;
     }
 
-    public List<ToDo> findAll() throws SQLException {
-        List<ToDo> res = new ArrayList<>();
-        try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(
-                    "select t.id, t.idCategory, t.description, t.targetDate, c.description " +
-                            "from todos t " +
-                            "inner join category c on t.idCategory = c.id");
-
-            while (rs.next()) {
-                res.add(new ToDo(rs.getLong(1), rs.getInt(2), rs.getString(3),
-                        rs.getDate(4, Calendar.getInstance()).toLocalDate(),
-                        rs.getString(5)));
-            }
-        }
-        return res;
+    public List<ToDo> findAll() {
+        return em.createQuery("from ToDo ", ToDo.class).getResultList();
     }
 
     public List<Category> findAllCategory() throws SQLException {
@@ -197,12 +156,6 @@ public class ToDoRepository {
 
     private void createTableIfNotExists(Connection conn) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute("create table if not exists todos (\n" +
-                    "\tid int auto_increment primary key,\n" +
-                    "    idCategory int, \n" +
-                    "    description varchar(64),\n" +
-                    "    targetDate date \n" +
-                    ");");
             stmt.execute("create table if not exists orders (\n" +
                     "\tid int auto_increment primary key,\n" +
                     "    name varchar(96),\n" +
