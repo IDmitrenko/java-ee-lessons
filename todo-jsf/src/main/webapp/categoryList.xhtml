@@ -17,6 +17,8 @@
 
 <h:body>
 
+    <f:event type="preRenderView" listener="${categoryBean.preloadCategoryList}" />
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Category</a>
 

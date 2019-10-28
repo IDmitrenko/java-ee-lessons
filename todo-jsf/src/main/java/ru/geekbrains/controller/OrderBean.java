@@ -2,10 +2,7 @@ package ru.geekbrains.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.geekbrains.persist.ContentsOrder;
-import ru.geekbrains.persist.Order;
-import ru.geekbrains.persist.ToDo;
-import ru.geekbrains.persist.ToDoRepository;
+import ru.geekbrains.persist.*;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -48,7 +45,7 @@ public class OrderBean implements Serializable {
         toDoRepository.insertOrder(order);
 
         for (ToDo toDo : cartBean.getCartList()) {
-            toDoRepository.insertContentsOrder(new ContentsOrder(
+            toDoRepository.insertContentsOrder(new ContentsOrderId(
                     toDoRepository.findLastOrderId(),
                     toDo.getId()));
         }

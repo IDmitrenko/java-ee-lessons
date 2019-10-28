@@ -10,7 +10,6 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped

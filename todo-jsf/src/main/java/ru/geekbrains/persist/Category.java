@@ -1,9 +1,16 @@
 package ru.geekbrains.persist;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "category")
 public class Category {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(length = 2048)
     private String description;
 
     public Category(int id, String description) {
