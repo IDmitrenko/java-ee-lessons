@@ -14,12 +14,12 @@ import java.util.List;
 
 @ApplicationScoped
 @Named
-public class ToDoRepositoryImpl implements ToDoRepository{
+public class ToDoRepositoryImpl implements ToDoRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(ToDoRepositoryImpl.class);
 
     @PersistenceContext(unitName = "ds")
-    private EntityManager em;
+    protected EntityManager em;
 
     @PostConstruct
     public void init() {
@@ -100,14 +100,14 @@ public class ToDoRepositoryImpl implements ToDoRepository{
 
     public int findLastNumber() {
         List<Order> list = em.createQuery
-                ("SELECT o from Order o order by o.numbers desc",Order.class)
+                ("SELECT o from Order o order by o.numbers desc", Order.class)
                 .getResultList();
         return list.get(1).getNumbers();
     }
 
     public Long findLastOrderId() {
         List<Order> list = em.createQuery
-                ("SELECT o from Order o order by o.id desc",Order.class)
+                ("SELECT o from Order o order by o.id desc", Order.class)
                 .getResultList();
         return list.get(1).getId();
     }

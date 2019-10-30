@@ -15,7 +15,8 @@ public class Category implements Serializable {
     @Column(length = 2048)
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "category")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "category", fetch = FetchType.EAGER)
     private List<ToDo> toDoList;
 
     public List<ToDo> getToDoList() {
