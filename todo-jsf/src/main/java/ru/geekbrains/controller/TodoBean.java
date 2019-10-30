@@ -3,14 +3,13 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.ToDo;
-import ru.geekbrains.persist.ToDoRepository;
+import ru.geekbrains.persist.ToDoRepositoryImpl;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped
@@ -20,7 +19,7 @@ public class TodoBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(TodoBean.class);
 
     @Inject
-    private ToDoRepository toDoRepository;
+    private ToDoRepositoryImpl toDoRepository;
 
     @Inject
     private CategoryBean categoryBean;

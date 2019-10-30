@@ -1,19 +1,29 @@
 package ru.geekbrains.persist;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 512)
     private String name;
 
+    @Column
     private LocalDate date;
 
+    @Column
     private int numbers;
 
+    @Column(length = 1024)
     private String address;
 
+    @Column
     private String phone;
 
     public Order() {

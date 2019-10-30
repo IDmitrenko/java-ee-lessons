@@ -1,10 +1,31 @@
 package ru.geekbrains.persist;
 
-public class Category {
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
+@Entity
+@Table(name = "category")
+public class Category implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(length = 2048)
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "category", fetch = FetchType.EAGER)
+    private List<ToDo> toDoList;
+
+    public List<ToDo> getToDoList() {
+        return toDoList;
+    }
+
+    public void setToDoList(List<ToDo> toDoList) {
+        this.toDoList = toDoList;
+    }
 
     public Category(int id, String description) {
         this.id = id;

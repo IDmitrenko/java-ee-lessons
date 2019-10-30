@@ -3,13 +3,13 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
-import ru.geekbrains.persist.ToDoRepository;
+import ru.geekbrains.persist.ToDoRepositoryImpl;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped
@@ -29,12 +29,18 @@ public class CategoryBean implements Serializable {
     }
 
     @Inject
-    private ToDoRepository toDoRepository;
+    private ToDoRepositoryImpl toDoRepository;
 
     @Inject
     private TodoBean todoBean;
 
     private Category category;
+
+    private List<Category> categoryList;
+
+    public void preloadCategoryList(ComponentSystemEvent componentSystemEvent) {
+        this.categoryList = toDoRepository.findAllCategory();
+    }
 
     public Category getCategory() {
         return category;
@@ -44,8 +50,8 @@ public class CategoryBean implements Serializable {
         this.category = category;
     }
 
-    public List<Category> getAllCategory() throws SQLException {
-        return toDoRepository.findAllCategory();
+    public List<Category> getAllCategory() {
+        return categoryList;
     }
 
     public String createCategory() {
@@ -53,7 +59,7 @@ public class CategoryBean implements Serializable {
         return "/category.xhtml?faces-redirect=true";
     }
 
-    public String saveCategory() throws SQLException {
+    public String saveCategory() {
         if (category.getId() == 0) {
             toDoRepository.insertCategory(category);
         } else{
@@ -63,12 +69,12 @@ public class CategoryBean implements Serializable {
     }
 
     public String selectCategory(Category category) {
-        todoBean.getToDo().setIdCategory(category.getId());
+        todoBean.getToDo().getCategory().setId(category.getId());
         this.category = category;
         return "/todo.xhtml?faces-redirect=true";
     }
 
-    public void deleteCategory(Category category) throws SQLException {
+    public void deleteCategory(Category category) {
         logger.info("Deleting Category.");
         toDoRepository.deleteCategory(category.getId());
     }
