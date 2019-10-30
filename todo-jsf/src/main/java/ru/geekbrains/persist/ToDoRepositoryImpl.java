@@ -9,12 +9,13 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
 @Named
-public class ToDoRepositoryImpl implements ToDoRepository {
+public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ToDoRepositoryImpl.class);
 
