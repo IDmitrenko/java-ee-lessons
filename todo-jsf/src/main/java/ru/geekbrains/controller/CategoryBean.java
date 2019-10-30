@@ -3,7 +3,7 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
-import ru.geekbrains.persist.ToDoRepository;
+import ru.geekbrains.persist.ToDoRepositoryImpl;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
@@ -29,7 +29,7 @@ public class CategoryBean implements Serializable {
     }
 
     @Inject
-    private ToDoRepository toDoRepository;
+    private ToDoRepositoryImpl toDoRepository;
 
     @Inject
     private TodoBean todoBean;
@@ -69,7 +69,7 @@ public class CategoryBean implements Serializable {
     }
 
     public String selectCategory(Category category) {
-        todoBean.getToDo().setIdCategory(category.getId());
+        todoBean.getToDo().getCategory().setId(category.getId());
         this.category = category;
         return "/todo.xhtml?faces-redirect=true";
     }

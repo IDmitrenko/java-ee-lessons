@@ -23,7 +23,7 @@ public class OrderBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(OrderBean.class);
 
     @Inject
-    private ToDoRepository toDoRepository;
+    private ToDoRepositoryImpl toDoRepository;
 
     private Order order;
 
@@ -44,10 +44,13 @@ public class OrderBean implements Serializable {
         order.setNumbers(toDoRepository.findLastNumber() + 1);
         toDoRepository.insertOrder(order);
 
-        for (ToDo toDo : cartBean.getCartList()) {
-            toDoRepository.insertContentsOrder(new ContentsOrderId(
-                    toDoRepository.findLastOrderId(),
-                    toDo.getId()));
+        for (ToDo toDo : cartBean.getOrderMap().keySet()) {
+            toDoRepository.insertContentsOrder(
+                    new ContentsOrder(
+                            new ContentsOrderId(
+                            toDoRepository.findLastOrderId(),
+                            toDo.getId()),
+                            cartBean.getOrderMap().get(toDo)));
         }
 
         cartBean.setCartList(new LinkedList<>());
