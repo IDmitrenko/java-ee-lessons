@@ -43,18 +43,7 @@ public class ToDo implements Serializable {
         this.category = category;
     }
 
-    @Transient
-    private String categoryDescription;
-
     public ToDo() {
-    }
-
-    public ToDo(Long id, Category category, String description, LocalDate targetDate, String categoryDescription) {
-        this.id = id;
-        this.category = category;
-        this.description = description;
-        this.targetDate = targetDate;
-        this.categoryDescription = categoryDescription;
     }
 
     public ToDo(Long id, Category category, String description, LocalDate targetDate) {
@@ -101,14 +90,6 @@ public class ToDo implements Serializable {
 
     public void setTargetDate(LocalDate targetDate) {
         this.targetDate = targetDate;
-    }
-
-    public String getCategoryDescription() {
-        return categoryDescription;
-    }
-
-    public void setCategoryDescription(String categoryDescription) {
-        this.categoryDescription = categoryDescription;
     }
 
     public double getPrice() {

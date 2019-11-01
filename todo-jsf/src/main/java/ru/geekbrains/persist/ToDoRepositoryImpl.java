@@ -3,14 +3,12 @@ package ru.geekbrains.persist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,28 +19,6 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
 
     @PersistenceContext(unitName = "ds")
     protected EntityManager em;
-
-    @PostConstruct
-    public void init() {
-
-        if (this.findAllCategory().isEmpty()) {
-            this.insertCategory(new Category(-1, "Фрукты"));
-            this.insertCategory(new Category(-1, "Овощи"));
-
-            Category category = new Category(1, "Фрукты");
-            if (this.findAll().isEmpty()) {
-                this.insert(new ToDo(-1L, category, "Apples", LocalDate.now()));
-                this.insert(new ToDo(-1L, category, "Pears", LocalDate.now()));
-                this.insert(new ToDo(-1L, category, "Oranges", LocalDate.now()));
-                this.insert(new ToDo(-1L, category, "Pineapples", LocalDate.now()));
-                this.insert(new ToDo(-1L, category, "Strawberry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, category, "Cherry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, category, "Lemons", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, category, "Currant", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, category, "Viburnum", LocalDate.now().plusDays(1)));
-            }
-        }
-    }
 
     @Transactional
     public void insert(ToDo toDo) {

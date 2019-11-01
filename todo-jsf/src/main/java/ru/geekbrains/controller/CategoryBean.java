@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
 import ru.geekbrains.persist.ToDoRepositoryImpl;
 
+import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.UserTransaction;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,6 +35,9 @@ public class CategoryBean implements Serializable {
 
     @Inject
     private TodoBean todoBean;
+
+    @Resource
+    protected UserTransaction userTransaction;
 
     private Category category;
 
@@ -69,7 +74,7 @@ public class CategoryBean implements Serializable {
     }
 
     public String selectCategory(Category category) {
-        todoBean.getToDo().getCategory().setId(category.getId());
+        todoBean.getToDo().setCategory(category);
         this.category = category;
         return "/todo.xhtml?faces-redirect=true";
     }

@@ -1,6 +1,8 @@
 package ru.geekbrains.persist;
 
+import javax.annotation.Resource;
 import javax.persistence.*;
+import javax.transaction.UserTransaction;
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class Category implements Serializable {
     @Column(length = 2048)
     private String description;
 
+/*
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
             mappedBy = "category", fetch = FetchType.EAGER)
     private List<ToDo> toDoList;
@@ -26,6 +29,7 @@ public class Category implements Serializable {
     public void setToDoList(List<ToDo> toDoList) {
         this.toDoList = toDoList;
     }
+*/
 
     public Category(int id, String description) {
         this.id = id;
