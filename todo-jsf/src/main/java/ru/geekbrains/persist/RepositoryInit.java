@@ -10,7 +10,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.*;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -30,11 +35,15 @@ public class RepositoryInit implements Serializable {
     protected UserTransaction userTransaction;
 
     @PostConstruct
-    public void init() throws SystemException{
+    public void init() {
         logger.info("init started");
         if (toDoRepository.findAllCategory().isEmpty()) {
             try {
-                userTransaction.begin();
+                try {
+                    userTransaction.begin();
+                } catch (SystemException ex) {
+                    logger.error("SystemException begin", ex);
+                }
                 em.joinTransaction();
                 Category fruitsCategory = new Category(-1, "Фрукты");
                 toDoRepository.insertCategory(fruitsCategory);
@@ -51,7 +60,11 @@ public class RepositoryInit implements Serializable {
                     toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Currant", LocalDate.now().plusDays(1)));
                     toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Viburnum", LocalDate.now().plusDays(1)));
                 }
-                userTransaction.commit();
+                try {
+                    userTransaction.commit();
+                } catch (SystemException ex) {
+                    logger.error("SystemException commit", ex);
+                }
             } catch (NotSupportedException ex) {
                 logger.error("Transaction not supported", ex);
                 try {
