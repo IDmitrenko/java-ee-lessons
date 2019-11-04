@@ -1,20 +1,16 @@
 package ru.geekbrains.persist;
 
+import java.util.List;
+
 public interface ToDoRepository {
 
     void insert(ToDo toDo);
 
-    void insertCategory(Category category);
-
-    void insertOrder(Order order);
-
-    void insertContentsOrder(ContentsOrder contentsOrder);
-
     void update(ToDo toDo);
-
-    void updateCategory(Category category);
 
     void delete(long id);
 
-    void deleteCategory(int id);
+    ToDo findById(long id);
+
+    List<ToDo> findAll();
 }

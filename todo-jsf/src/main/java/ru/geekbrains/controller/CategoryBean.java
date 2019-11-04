@@ -3,14 +3,12 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
-import ru.geekbrains.persist.ToDoRepositoryImpl;
+import ru.geekbrains.persist.Impl.CategoryRepositoryImpl;
 
-import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.transaction.UserTransaction;
 import java.io.Serializable;
 import java.util.List;
 
@@ -31,20 +29,17 @@ public class CategoryBean implements Serializable {
     }
 
     @Inject
-    private ToDoRepositoryImpl toDoRepository;
+    private CategoryRepositoryImpl categoryRepository;
 
     @Inject
     private TodoBean todoBean;
-
-    @Resource
-    protected UserTransaction userTransaction;
 
     private Category category;
 
     private List<Category> categoryList;
 
     public void preloadCategoryList(ComponentSystemEvent componentSystemEvent) {
-        this.categoryList = toDoRepository.findAllCategory();
+        this.categoryList = categoryRepository.findAllCategory();
     }
 
     public Category getCategory() {
@@ -66,9 +61,9 @@ public class CategoryBean implements Serializable {
 
     public String saveCategory() {
         if (category.getId() == 0) {
-            toDoRepository.insertCategory(category);
+            categoryRepository.insertCategory(category);
         } else{
-            toDoRepository.updateCategory(category);
+            categoryRepository.updateCategory(category);
         }
         return "/categoryList.xhtml?faces-redirect=true";
     }
@@ -81,7 +76,7 @@ public class CategoryBean implements Serializable {
 
     public void deleteCategory(Category category) {
         logger.info("Deleting Category.");
-        toDoRepository.deleteCategory(category.getId());
+        categoryRepository.deleteCategory(category.getId());
     }
 
     public String editCategory(Category category) {

@@ -1,12 +1,13 @@
-package ru.geekbrains.persist;
+package ru.geekbrains.persist.Impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.geekbrains.persist.Category;
+import ru.geekbrains.persist.CategoryRepository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,21 +16,19 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 
 @ApplicationScoped
 @Named
-public class RepositoryInit implements Serializable {
+public class CategoryRepositoryImpl implements CategoryRepository, Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(RepositoryInit.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryRepositoryImpl.class);
 
     @PersistenceContext(unitName = "ds")
     protected EntityManager em;
-
-    @Inject
-    private ToDoRepositoryImpl toDoRepository;
 
     @Resource
     protected UserTransaction userTransaction;
@@ -37,7 +36,9 @@ public class RepositoryInit implements Serializable {
     @PostConstruct
     public void init() {
         logger.info("init started");
-        if (toDoRepository.findAllCategory().isEmpty()) {
+
+
+        if (this.findAllCategory().isEmpty()) {
             try {
                 try {
                     userTransaction.begin();
@@ -45,26 +46,15 @@ public class RepositoryInit implements Serializable {
                     logger.error("SystemException begin", ex);
                 }
                 em.joinTransaction();
-                Category fruitsCategory = new Category(-1, "Фрукты");
-                toDoRepository.insertCategory(fruitsCategory);
-                toDoRepository.insertCategory(new Category(-1, "Овощи"));
+                this.insertCategory(new Category(-1, "Fruits"));
+                this.insertCategory(new Category(-1, "Vegetables"));
 
-                if (toDoRepository.findAll().isEmpty()) {
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Apples", LocalDate.now()));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Pears", LocalDate.now()));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Oranges", LocalDate.now()));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Pineapples", LocalDate.now()));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Strawberry", LocalDate.now().plusDays(1)));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Cherry", LocalDate.now().plusDays(1)));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Lemons", LocalDate.now().plusDays(1)));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Currant", LocalDate.now().plusDays(1)));
-                    toDoRepository.insert(new ToDo(-1L, fruitsCategory, "Viburnum", LocalDate.now().plusDays(1)));
-                }
                 try {
                     userTransaction.commit();
                 } catch (SystemException ex) {
                     logger.error("SystemException commit", ex);
                 }
+
             } catch (NotSupportedException ex) {
                 logger.error("Transaction not supported", ex);
                 try {
@@ -81,4 +71,31 @@ public class RepositoryInit implements Serializable {
             }
         }
     }
+
+    @Transactional
+    public void insertCategory(Category category) {
+        em.persist(category);
+    }
+
+    @Transactional
+    public void updateCategory(Category category) {
+        em.merge(category);
+    }
+
+    @Transactional
+    public void deleteCategory(int id) {
+        Category category = em.find(Category.class, id);
+        if (category != null) {
+            em.remove(category);
+        }
+    }
+
+    public Category findCategoryById(int id) {
+        return em.find(Category.class, id);
+    }
+
+    public List<Category> findAllCategory() {
+        return em.createQuery("from Category ", Category.class).getResultList();
+    }
+
 }
