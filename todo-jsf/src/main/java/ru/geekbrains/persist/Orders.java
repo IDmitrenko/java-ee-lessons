@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "orders")
-public class Order implements Serializable {
+public class Orders implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class Order implements Serializable {
     @Column
     private String phone;
 
-    public Order() {
+    public Orders() {
     }
 
-    public Order(Long id, String name, LocalDate date, int numbers, String address, String phone) {
+    public Orders(Long id, String name, LocalDate date, int numbers, String address, String phone) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -92,14 +92,14 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Order order = (Order) o;
+        Orders orders = (Orders) o;
 
-        if (numbers != order.numbers) return false;
-        if (id != null ? !id.equals(order.id) : order.id != null) return false;
-        if (name != null ? !name.equals(order.name) : order.name != null) return false;
-        if (date != null ? !date.equals(order.date) : order.date != null) return false;
-        if (address != null ? !address.equals(order.address) : order.address != null) return false;
-        return phone != null ? phone.equals(order.phone) : order.phone == null;
+        if (numbers != orders.numbers) return false;
+        if (id != null ? !id.equals(orders.id) : orders.id != null) return false;
+        if (name != null ? !name.equals(orders.name) : orders.name != null) return false;
+        if (date != null ? !date.equals(orders.date) : orders.date != null) return false;
+        if (address != null ? !address.equals(orders.address) : orders.address != null) return false;
+        return phone != null ? phone.equals(orders.phone) : orders.phone == null;
     }
 
     @Override

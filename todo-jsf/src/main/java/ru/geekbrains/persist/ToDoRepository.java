@@ -1,7 +1,9 @@
 package ru.geekbrains.persist;
 
+import javax.ejb.Local;
 import java.util.List;
 
+@Local
 public interface ToDoRepository {
 
     void insert(ToDo toDo);

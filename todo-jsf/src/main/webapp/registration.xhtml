@@ -43,7 +43,7 @@
 
                     <div class="form-group">
                         <h:outputLabel value="Name"/>
-                        <h:inputText styleClass="form-control" id="name" value="#{orderBean.order.name}"
+                        <h:inputText styleClass="form-control" id="name" value="#{orderBean.orders.name}"
                                      placeholder="Enter name" required="true"
                                      validatorMessage="Вы должны использовать только буквы русского и английского алфавитов">
                             <f:validateRegex pattern="(^[а-яА-Яa-zA-Z\s]+(.)?[\s]*)$"/>
@@ -53,14 +53,14 @@
 
                     <div class="form-group">
                         <h:outputLabel value="Address"/>
-                        <h:inputText styleClass="form-control" id="address" value="#{orderBean.order.address}"
+                        <h:inputText styleClass="form-control" id="address" value="#{orderBean.orders.address}"
                                      placeholder="Enter address" required="true"/>
                         <h:message for="address" style="color: red"/>
                     </div>
 
                     <div class="form-group">
                         <h:outputLabel value="Phone"/>
-                        <h:inputText id="phone" value="#{orderBean.order.phone}" required="true">
+                        <h:inputText id="phone" value="#{orderBean.orders.phone}" required="true">
                           <f:validator validatorId="phoneValidator"/>
                         </h:inputText>
                         <h:message for="phone" style="color: red"/>

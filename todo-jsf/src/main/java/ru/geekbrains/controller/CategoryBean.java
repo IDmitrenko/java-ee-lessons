@@ -3,8 +3,9 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.Category;
-import ru.geekbrains.persist.Impl.CategoryRepositoryImpl;
+import ru.geekbrains.persist.CategoryRepository;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
@@ -15,6 +16,9 @@ import java.util.List;
 @SessionScoped
 @Named
 public class CategoryBean implements Serializable {
+
+    public CategoryBean() {
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryBean.class);
 
@@ -28,8 +32,8 @@ public class CategoryBean implements Serializable {
         this.showSelect = showSelect;
     }
 
-    @Inject
-    private CategoryRepositoryImpl categoryRepository;
+    @EJB
+    private CategoryRepository categoryRepository;
 
     @Inject
     private TodoBean todoBean;

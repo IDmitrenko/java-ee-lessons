@@ -1,8 +1,11 @@
 package ru.geekbrains.persist;
 
+import javax.ejb.Local;
+
+@Local
 public interface OrderRepository {
 
-    void insertOrder(Order order);
+    void insertOrder(Orders orders);
 
     int findLastNumber();
 
