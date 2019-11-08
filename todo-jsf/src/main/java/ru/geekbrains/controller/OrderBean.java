@@ -3,7 +3,11 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.*;
+import ru.geekbrains.persist.Impl.CartRepositoryImpl;
+import ru.geekbrains.persist.Impl.OrderRepositoryImpl;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,33 +26,36 @@ public class OrderBean implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderBean.class);
 
-    @Inject
-    private ToDoRepositoryImpl toDoRepository;
+    @EJB
+    private OrderRepository orderRepository;
 
-    private Order order;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+    @EJB
+    private CartRepository cartRepository;
 
     @Inject
     private CartBean cartBean;
 
+    private Orders orders;
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
+    }
+
     public String saveOrder() throws SQLException {
-        order.setId(-1L);
-        order.setDate( LocalDate.now());
-        order.setNumbers(toDoRepository.findLastNumber() + 1);
-        toDoRepository.insertOrder(order);
+        orders.setId(-1L);
+        orders.setDate( LocalDate.now());
+        orders.setNumbers(orderRepository.findLastNumber() + 1);
+        orderRepository.insertOrder(orders);
 
         for (ToDo toDo : cartBean.getOrderMap().keySet()) {
-            toDoRepository.insertContentsOrder(
+            cartRepository.insertContentsOrder(
                     new ContentsOrder(
                             new ContentsOrderId(
-                            toDoRepository.findLastOrderId(),
+                            orderRepository.findLastOrderId(),
                             toDo.getId()),
                             cartBean.getOrderMap().get(toDo)));
         }
@@ -60,7 +67,7 @@ public class OrderBean implements Serializable {
     }
 
     public String registrationOrder() {
-        this.order = new Order();
+        this.orders = new Orders();
         return "/registration.xhtml?faces-redirect=true";
     }
 
