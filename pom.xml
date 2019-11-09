@@ -13,6 +13,10 @@
         <module>webapp</module>
         <module>todo</module>
         <module>todo-jsf</module>
+        <module>ws-client</module>
+        <module>users-impl</module>
+        <module>users-api</module>
+        <module>ejb-client</module>
     </modules>
 
 </project>

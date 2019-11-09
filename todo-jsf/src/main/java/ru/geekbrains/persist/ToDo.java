@@ -20,10 +20,10 @@ public class ToDo implements Serializable {
     private String description;
 
     @Column(scale = 2, precision = 10)
-    private double price;
+    private Double price;
 
     @Column
-    private int count;
+    private Integer count;
 
     @Column
     private Boolean active;
@@ -51,6 +51,15 @@ public class ToDo implements Serializable {
         this.category = category;
         this.description = description;
         this.targetDate = targetDate;
+    }
+
+    public ToDo(@NotNull String description, Double price, Integer count, Boolean active, LocalDate targetDate, Category category) {
+        this.description = description;
+        this.price = price;
+        this.count = count;
+        this.active = active;
+        this.targetDate = targetDate;
+        this.category = category;
     }
 
     public Long getId() {
@@ -92,27 +101,27 @@ public class ToDo implements Serializable {
         this.targetDate = targetDate;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
