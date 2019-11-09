@@ -66,7 +66,7 @@ public class CategoryBean implements Serializable {
     public String saveCategory() {
         if (category.getId() == 0) {
             categoryRepository.insertCategory(category);
-        } else{
+        } else {
             categoryRepository.updateCategory(category);
         }
         return "/categoryList.xhtml?faces-redirect=true";

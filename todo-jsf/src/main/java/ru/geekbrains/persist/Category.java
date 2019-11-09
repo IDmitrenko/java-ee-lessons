@@ -1,10 +1,7 @@
 package ru.geekbrains.persist;
 
-import javax.annotation.Resource;
 import javax.persistence.*;
-import javax.transaction.UserTransaction;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "category")

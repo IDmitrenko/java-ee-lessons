@@ -3,11 +3,8 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.geekbrains.persist.*;
-import ru.geekbrains.persist.Impl.CartRepositoryImpl;
-import ru.geekbrains.persist.Impl.OrderRepositoryImpl;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,7 +44,7 @@ public class OrderBean implements Serializable {
 
     public String saveOrder() throws SQLException {
         orders.setId(-1L);
-        orders.setDate( LocalDate.now());
+        orders.setDate(LocalDate.now());
         orders.setNumbers(orderRepository.findLastNumber() + 1);
         orderRepository.insertOrder(orders);
 
@@ -55,8 +52,8 @@ public class OrderBean implements Serializable {
             cartRepository.insertContentsOrder(
                     new ContentsOrder(
                             new ContentsOrderId(
-                            orderRepository.findLastOrderId(),
-                            toDo.getId()),
+                                    orderRepository.findLastOrderId(),
+                                    toDo.getId()),
                             cartBean.getOrderMap().get(toDo)));
         }
 

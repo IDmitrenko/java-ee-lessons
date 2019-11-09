@@ -34,16 +34,16 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
 
 
         if (this.findAll().isEmpty()) {
-                Category fruitsCategory = new Category(1, "Fruits");
-                this.insert(new ToDo(-1L, fruitsCategory, "Apples", LocalDate.now()));
-                this.insert(new ToDo(-1L, fruitsCategory, "Pears", LocalDate.now()));
-                this.insert(new ToDo(-1L, fruitsCategory, "Oranges", LocalDate.now()));
-                this.insert(new ToDo(-1L, fruitsCategory, "Pineapples", LocalDate.now()));
-                this.insert(new ToDo(-1L, fruitsCategory, "Strawberry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, fruitsCategory, "Cherry", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, fruitsCategory, "Lemons", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, fruitsCategory, "Currant", LocalDate.now().plusDays(1)));
-                this.insert(new ToDo(-1L, fruitsCategory, "Viburnum", LocalDate.now().plusDays(1)));
+            Category fruitsCategory = new Category(1, "Fruits");
+            this.insert(new ToDo(-1L, fruitsCategory, "Apples", LocalDate.now()));
+            this.insert(new ToDo(-1L, fruitsCategory, "Pears", LocalDate.now()));
+            this.insert(new ToDo(-1L, fruitsCategory, "Oranges", LocalDate.now()));
+            this.insert(new ToDo(-1L, fruitsCategory, "Pineapples", LocalDate.now()));
+            this.insert(new ToDo(-1L, fruitsCategory, "Strawberry", LocalDate.now().plusDays(1)));
+            this.insert(new ToDo(-1L, fruitsCategory, "Cherry", LocalDate.now().plusDays(1)));
+            this.insert(new ToDo(-1L, fruitsCategory, "Lemons", LocalDate.now().plusDays(1)));
+            this.insert(new ToDo(-1L, fruitsCategory, "Currant", LocalDate.now().plusDays(1)));
+            this.insert(new ToDo(-1L, fruitsCategory, "Viburnum", LocalDate.now().plusDays(1)));
         }
     }
 

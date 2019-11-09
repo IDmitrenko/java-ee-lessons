@@ -26,7 +26,7 @@ public class ToDo implements Serializable {
     private int count;
 
     @Column
-    private boolean active;
+    private Boolean active;
 
     @Column
     private LocalDate targetDate;
