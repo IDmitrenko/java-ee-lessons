@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ToDoServiceImpl implements ToDoService, ToDoServiceRest {
@@ -34,15 +35,23 @@ public class ToDoServiceImpl implements ToDoService, ToDoServiceRest {
 
     }
 
+    @Override
     public void delete(Long id) {
 
+    }
+
+    @Override
+    public ToDo findByDescription(String description) {
+        return todos.stream()
+                .filter(t -> t.getDescription().equals(description))
+                .findFirst()
+                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
     }
 
     public List<ToDo> findByCategory(Integer id) {
         return todos.stream()
                 .filter(t -> t.getCategory().getId().equals(id))
-                .forEach()
-                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -52,7 +61,7 @@ public class ToDoServiceImpl implements ToDoService, ToDoServiceRest {
     }
 
     @Override
-    public ToDo getToDo(Long id) {
+    public ToDo findById(Long id) {
         return todos.stream()
                 .filter(t -> t.getId().equals(id))
                 .findFirst()

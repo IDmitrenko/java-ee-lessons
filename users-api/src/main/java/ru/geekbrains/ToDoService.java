@@ -11,9 +11,9 @@ public interface ToDoService {
 
     void insert(ToDo toDo);
 
-    void delete(long id);
+    void delete(Long id);
 
-    ToDo findById(long id);
+    ToDo findById(Long id);
 
     ToDo findByDescription(String description);
 

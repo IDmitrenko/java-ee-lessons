@@ -13,6 +13,7 @@ import javax.ejb.TransactionAttribute;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -77,6 +78,20 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
     @Interceptors({LogPlaces.class})
     public ToDo findById(long id) {
         return em.find(ToDo.class, id);
+    }
+
+    @Override
+    @TransactionAttribute
+    @Interceptors({LogPlaces.class})
+    public ToDo findByDescription(String description) {
+        return em.find(ToDo.class, description);
+    }
+
+    @Override
+    public List<ToDo> findByCategory(Category category) {
+        TypedQuery<ToDo> query = em.createQuery("from ToDo t where t.category = ?1", ToDo.class);
+        query.setParameter(1, category);
+        return query.getResultList();
     }
 
     @Override

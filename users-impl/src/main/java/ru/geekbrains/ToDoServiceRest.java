@@ -23,5 +23,5 @@ public interface ToDoServiceRest {
     @GET
     @Path("{id}/id")  //возврат конкретного товара по Id
     @Produces(MediaType.APPLICATION_JSON)
-    ToDo getToDo(@PathParam("id") Long id);
+    ToDo findById(@PathParam("id") Long id);
 }

@@ -14,5 +14,9 @@ public interface ToDoRepository {
 
     ToDo findById(long id);
 
+    ToDo findByDescription(String description);
+
     List<ToDo> findAll();
+
+    List<ToDo> findByCategory(Category category);
 }
