@@ -4,6 +4,8 @@ import ru.geekbrains.service.Category;
 import ru.geekbrains.service.ToDoRepr;
 import ru.geekbrains.service.ToDoService;
 import ru.geekbrains.service.ToDoServiceWs;
+import ru.geekbrains.service.CategoryService;
+import ru.geekbrains.service.CategoryServiceWs;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -16,6 +18,7 @@ public class WsClient {
 
     public static void main(String[] args) throws MalformedURLException, DatatypeConfigurationException {
         URL url = new URL("http://localhost:8130/todo-jsf/ToDoService/ToDoService?WSDL");
+
         ToDoService toDoService = new ToDoService(url);
 
         ToDoServiceWs toDoServicePort = toDoService.getToDoServicePort();
@@ -39,6 +42,25 @@ public class WsClient {
 
         toDoServicePort.findAll()
                 .forEach(t -> System.out.println(t.getDescription()));
+
+        Long idToDo = 3L;
+        toDoServicePort.findById(idToDo);
+
+        toDoServicePort.delete(idToDo);
+
+        String description = "Pears";
+        toDoServicePort.findByDescription(description);
+
+        Integer idCategory = 1;
+        toDoServicePort.findByCategory(idCategory);
+
+        CategoryService categoryService = new CategoryService(url);
+
+        CategoryServiceWs categoryServicePort = toDoService.getCategoryServicePort();
+
+        Category categoryNew = new Category();
+        categoryNew.setDescription("Technic");
+        categoryServicePort.insertCategory(categoryNew);
 
     }
 }
