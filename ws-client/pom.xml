@@ -31,6 +31,7 @@
                         <configuration>
                             <wsdlUrls>
                                 <wsdlUrl>http://localhost:8130/todo-jsf/ToDoService/ToDoService?WSDL</wsdlUrl>
+                                <wsdlUrl>http://localhost:8130/todo-jsf/CategoryService/CategoryService?WSDL</wsdlUrl>
                             </wsdlUrls>
                         </configuration>
                     </execution>

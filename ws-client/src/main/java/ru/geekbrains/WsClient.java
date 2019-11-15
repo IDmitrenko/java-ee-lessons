@@ -56,7 +56,7 @@ public class WsClient {
 
         CategoryService categoryService = new CategoryService(url);
 
-        CategoryServiceWs categoryServicePort = toDoService.getCategoryServicePort();
+        CategoryServiceWs categoryServicePort = categoryService.getCategoryServicePort();
 
         Category categoryNew = new Category();
         categoryNew.setDescription("Technic");
