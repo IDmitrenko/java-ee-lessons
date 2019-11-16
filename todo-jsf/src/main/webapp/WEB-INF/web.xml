@@ -84,4 +84,15 @@
         </auth-constraint>
     </security-constraint>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Category resources</web-resource-name>
+            <url-pattern>/category/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+            <role-name>MANAGER</role-name>
+        </auth-constraint>
+    </security-constraint>
+
 </web-app>

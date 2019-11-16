@@ -26,6 +26,7 @@ public class RoleRepository {
         if (roleCount == 0L) {
             em.merge(new Role("ADMIN"));
             em.merge(new Role("GUEST"));
+            em.merge(new Role("MANAGER"));
         }
     }
 

@@ -7,6 +7,8 @@ import ru.geekbrains.persist.CategoryRepository;
 import ru.geekbrains.service.LogPlaces;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.interceptor.Interceptors;
@@ -16,6 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Stateless
+@PermitAll
 public class CategoryRepositoryImpl implements CategoryRepository, Serializable {
 
     public CategoryRepositoryImpl() {
@@ -37,6 +40,7 @@ public class CategoryRepositoryImpl implements CategoryRepository, Serializable 
     }
 
     @Override
+    @RolesAllowed({"ADMIN","MANAGER"})
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void insertCategory(Category category) {
@@ -44,6 +48,7 @@ public class CategoryRepositoryImpl implements CategoryRepository, Serializable 
     }
 
     @Override
+    @RolesAllowed({"ADMIN","MANAGER"})
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void updateCategory(Category category) {
@@ -51,6 +56,7 @@ public class CategoryRepositoryImpl implements CategoryRepository, Serializable 
     }
 
     @Override
+    @RolesAllowed({"ADMIN","MANAGER"})
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void deleteCategory(int id) {
