@@ -5,6 +5,7 @@ import ru.geekbrains.persist.CategoryRepository;
 import ru.geekbrains.persist.ToDo;
 import ru.geekbrains.persist.ToDoRepository;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
+@PermitAll
 @WebService(endpointInterface = "ru.geekbrains.service.ToDoServiceWs", serviceName = "ToDoService")
 public class ToDoService {
 

@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class CategoryBean implements Serializable {
     @Inject
     private TodoBean todoBean;
 
+    @Inject
+    private HttpServletRequest request;
+
     private Category category;
 
     private List<Category> categoryList;
@@ -60,7 +64,7 @@ public class CategoryBean implements Serializable {
 
     public String createCategory() {
         this.category = new Category();
-        return "/category.xhtml?faces-redirect=true";
+        return "/category/category.xhtml?faces-redirect=true";
     }
 
     public String saveCategory() {
@@ -69,7 +73,7 @@ public class CategoryBean implements Serializable {
         } else {
             categoryRepository.updateCategory(category);
         }
-        return "/categoryList.xhtml?faces-redirect=true";
+        return "/category/categoryList.xhtml?faces-redirect=true";
     }
 
     public String selectCategory(Category category) {
@@ -85,11 +89,11 @@ public class CategoryBean implements Serializable {
 
     public String editCategory(Category category) {
         this.category = category;
-        return "/category.xhtml?faces-redirect=true";
+        return "/category/category.xhtml?faces-redirect=true";
     }
 
     public String showCategory(boolean showSelect) {
         this.showSelect = showSelect;
-        return "/categoryList.xhtml?faces-redirect=true";
+        return "/category/categoryList.xhtml?faces-redirect=true";
     }
 }

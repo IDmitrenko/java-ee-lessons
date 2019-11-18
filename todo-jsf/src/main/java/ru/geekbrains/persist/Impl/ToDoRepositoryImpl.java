@@ -8,6 +8,8 @@ import ru.geekbrains.persist.ToDoRepository;
 import ru.geekbrains.service.LogPlaces;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.interceptor.Interceptors;
@@ -19,6 +21,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Stateless
+@PermitAll
+//@TransactionManagement(javax.ejb.TransactionManagementType.BEAN)
 public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
 
     public ToDoRepositoryImpl() {
@@ -49,6 +53,7 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void insert(ToDo toDo) {
@@ -57,6 +62,7 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void update(ToDo toDo) {
@@ -64,6 +70,7 @@ public class ToDoRepositoryImpl implements ToDoRepository, Serializable {
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     @TransactionAttribute
     @Interceptors({LogPlaces.class})
     public void delete(long id) {
